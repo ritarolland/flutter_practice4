@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:practice4/profile_screen.dart';
 
 import 'catalog_screen.dart';
 import 'cart_screen.dart';
@@ -35,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _screens = const [
     CatalogScreen(),
     CartScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -49,14 +51,12 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store),
-            label: 'Каталог',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.store), label: 'Каталог'),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Корзина',
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Профиль'),
         ],
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
