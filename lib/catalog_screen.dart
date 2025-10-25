@@ -78,6 +78,64 @@ class _CatalogScreenState extends State<CatalogScreen> {
     );
   }
 
+  void _showAddFlowerDialog() {
+    final nameController = TextEditingController();
+    final priceController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Добавить цветок'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Название',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: priceController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  labelText: 'Цена (₽)',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Отмена'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final name = nameController.text.trim();
+                final price = int.tryParse(priceController.text.trim()) ?? 0;
+
+                if (name.isNotEmpty && price > 0) {
+                  setState(() {
+                    _flowers.add({'name': name, 'price': price});
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+              child: const Text('Добавить'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,6 +161,12 @@ class _CatalogScreenState extends State<CatalogScreen> {
               _buildCatalogItem(flower['name'], flower['price'].toDouble()))
               .toList(),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.pink,
+        foregroundColor: Colors.white,
+        onPressed: _showAddFlowerDialog,
+        child: const Icon(Icons.add, size: 32),
       ),
     );
   }

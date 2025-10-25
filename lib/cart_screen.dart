@@ -66,6 +66,60 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
+  void _showAddItemDialog() {
+    final nameController = TextEditingController();
+    final quantityController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Добавить товар в корзину'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Название товара',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: quantityController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Количество',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Отмена'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final name = nameController.text.trim();
+              final quantity = int.tryParse(quantityController.text.trim()) ?? 0;
+
+              if (name.isNotEmpty && quantity > 0) {
+                setState(() {
+                  _cartItems.add({'name': name, 'quantity': quantity});
+                });
+                Navigator.pop(context);
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            child: const Text('Добавить'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,6 +143,12 @@ class _CartScreenState extends State<CartScreen> {
           final item = _cartItems[_cartItems.length - 1 - index];
           return _buildCartItem(item);
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        onPressed: _showAddItemDialog,
+        child: const Icon(Icons.add, size: 32),
       ),
     );
   }

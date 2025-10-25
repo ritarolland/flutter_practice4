@@ -54,6 +54,59 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _showAddInfoDialog() {
+    final titleController = TextEditingController();
+    final valueController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Добавить информацию'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: 'Название поля',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: valueController,
+              decoration: const InputDecoration(
+                labelText: 'Значение',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Отмена'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              final title = titleController.text.trim();
+              final value = valueController.text.trim();
+
+              if (title.isNotEmpty && value.isNotEmpty) {
+                setState(() {
+                  _profileInfo.add({'title': title, 'value': value});
+                });
+                Navigator.pop(context);
+              }
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            child: const Text('Добавить'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,6 +136,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           endIndent: 16,
           color: Colors.grey,
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.pink,
+        foregroundColor: Colors.white,
+        onPressed: _showAddInfoDialog,
+        child: const Icon(Icons.add, size: 32),
       ),
     );
   }
