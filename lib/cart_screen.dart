@@ -29,6 +29,7 @@ class _CartScreenState extends State<CartScreen> {
 
   Widget _buildCartItem(Map<String, dynamic> item) {
     return Container(
+      key: ValueKey(item['name']), //уникальный ключ для корректного удаления
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -37,11 +38,12 @@ class _CartScreenState extends State<CartScreen> {
       ),
       child: Row(
         children: [
-          Text(
-            item['name'],
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+          Expanded(
+            child: Text(
+              item['name'],
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+            ),
           ),
-          Spacer(),
           Text(
             'x${item['quantity']}',
             style: const TextStyle(
@@ -49,6 +51,15 @@ class _CartScreenState extends State<CartScreen> {
               fontWeight: FontWeight.bold,
               color: Colors.pink,
             ),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _cartItems.remove(item);
+              });
+            },
+            child: const Icon(Icons.delete, color: Colors.red, size: 28),
           ),
         ],
       ),

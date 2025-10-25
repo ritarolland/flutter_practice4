@@ -37,6 +37,7 @@ class _CatalogScreenState extends State<CatalogScreen> {
 
   Widget _buildCatalogItem(String name, double price) {
     return Container(
+      key: ValueKey(name), //уникальный ключ для корректного удаления
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -45,17 +46,31 @@ class _CatalogScreenState extends State<CatalogScreen> {
       ),
       child: Row(
         children: [
-          Text(
-            name,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+          Expanded(
+            child: Text(
+              name,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+            ),
           ),
-          const Spacer(),
           Text(
             '${price.toStringAsFixed(0)} ₽',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: Colors.green,
+            ),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _flowers.removeWhere((flower) => flower['name'] == name);
+              });
+            },
+            child: const Icon(
+              Icons.delete,
+              color: Colors.red,
+              size: 28,
             ),
           ),
         ],

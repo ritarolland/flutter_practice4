@@ -18,21 +18,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildProfileItem(Map<String, String> item) {
     return Padding(
+      key: ValueKey(item['title']), //уникальный ключ для корректного удаления
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
-          Text(
-            item['title']!,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.pink,
+          Expanded(
+            child: Text(
+              item['title']!,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.pink,
+              ),
             ),
           ),
-          const Spacer(),
           Text(
             item['value']!,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(width: 12),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _profileInfo.remove(item);
+              });
+            },
+            child: const Icon(
+              Icons.delete,
+              color: Colors.red,
+              size: 28,
+            ),
           ),
         ],
       ),
